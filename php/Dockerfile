@@ -16,5 +16,4 @@ ENV PATH="$HOME/.composer/vendor/bin:${PATH}"
 WORKDIR /code
 
 ENTRYPOINT ["docker-php-entrypoint", "dockerize"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-
+CMD ["php-fpm"]
