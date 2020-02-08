@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+rm "/usr/local/etc/php/conf.d/docker-php-ext-$@.ini"

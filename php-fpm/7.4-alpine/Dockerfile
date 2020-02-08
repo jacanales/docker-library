@@ -1,8 +1,8 @@
 FROM jwilder/dockerize AS dockerize
-
 FROM composer:latest AS composer
 
-FROM php:7.4-fpm-alpine
+## Base target
+FROM php:7.4-fpm-alpine AS base
 
 LABEL maintainer = "Jesús Antonio Canales Diez <jcanales@zonadev.es>"
 
@@ -17,3 +17,6 @@ WORKDIR /code
 
 ENTRYPOINT ["docker-php-entrypoint", "dockerize"]
 CMD ["php-fpm"]
+
+## Target for dev environments
+FROM base AS dev
