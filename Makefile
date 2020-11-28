@@ -15,6 +15,15 @@ help:
 	@echo 'Invalid target. type `make help` to get a list of available targets'
 	@exit 1
 
+build-php-fpm:
+	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t jacanales/php-fpm:test .
+
+build-php-fpm-dev:
+	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t jacanales/php-fpm:test . --target dev
+
+bash:
+	docker run --rm -it jacanales/php-fpm:test /bin/bash
+
 build-php-alpine: ## Build PHP Image
 	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-alpine -t jacanales/php-fpm:alpine-test
 
@@ -23,3 +32,19 @@ build-php-minideb: ## Build PHP Image
 
 build-php-legacy: ## Build PHP Image
 	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-old -t jacanales/php-fpm:legacy-test
+
+install-container-test:
+	$(BASH) ./bin/install-container-structure-test.sh
+
+tests: ## Run Tests
+	container-structure-test test --image jacanales/php-fpm:test --config php-fpm/7.4-fpm/unit-test.yaml
+
+# Push targets
+docker-login:
+	docker login -u jacanales -p ${GITHUB_PACKAGES} docker.pkg.github.com
+
+docker-build:
+	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t docker.pkg.github.com/jacanales/docker-library/php:7.4
+
+docker-push: docker-login docker-build-php
+	docker push docker.pkg.github.com/jacanales/docker-library/php:8.0

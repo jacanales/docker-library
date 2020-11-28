@@ -1,0 +1,32 @@
+schemaVersion: '2.0.0'
+fileExistenceTests:
+  - name: 'Check composer exists'
+    path: '/usr/local/bin/composer'
+    shouldExist: true
+    uid: 1000
+    gid: 1000
+    isExecutableBy: 'group'
+  - name: 'Check workdir exists'
+    path: '/code'
+    shouldExist: true
+commandTests:
+  - name: "Composer Version"
+    command: "composer"
+    args: [ "-V" ]
+    expectedOutput: [ "Composer version 2.0*" ]
+  - name: "PHP Version"
+    command: "php"
+    args: ["-v"]
+    expectedOutput: ["PHP 8.0.0RC5 (cli)*"]
+  - name: "PHP installed modules"
+    command: "php"
+    args: [ "-m" ]
+    expectedOutput: [ "bcmath", "sockets" ]
+  - name: "PECL installed packages"
+    command: "pecl"
+    args: [ "list" ]
+    expectedOutput: [ "apcu", "redis", "igbinary"]
+metadataTest:
+  entrypoint: ["docker-php-entrypoint"]
+  cmd: ["php-fpm"]
+  workdir: "/code"
