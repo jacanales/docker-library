@@ -41,10 +41,10 @@ tests: ## Run Tests
 
 # Push targets
 docker-login:
-	docker login -u jacanales -p ${GITHUB_PACKAGES} docker.pkg.github.com
+	docker login -u jacanales -p ${PACKAGES} docker.pkg.github.com
 
 docker-build:
-	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t docker.pkg.github.com/jacanales/docker-library/php:7.4
+	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t docker.pkg.github.com/jacanales/danceschool/php:7.4
 
 docker-push: docker-login docker-build-php
-	docker push docker.pkg.github.com/jacanales/docker-library/php:7.4
+	docker push docker.pkg.github.com/jacanales/danceschool/php:7.4
