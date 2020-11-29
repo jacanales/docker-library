@@ -47,4 +47,4 @@ docker-build:
 	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t docker.pkg.github.com/jacanales/docker-library/php:7.4
 
 docker-push: docker-login docker-build-php
-	docker push docker.pkg.github.com/jacanales/docker-library/php:8.0
+	docker push docker.pkg.github.com/jacanales/docker-library/php:7.4
