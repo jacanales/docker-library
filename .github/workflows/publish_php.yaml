@@ -38,3 +38,15 @@ jobs:
           tags: |
             jacanales/php-fpm:7.4
             ghcr.io/jacanales/php-fpm:7.4
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: php-fpm/7.4-fpm
+          file: php-fpm/7.4-fpm/Dockerfile
+          platforms: linux/386
+          push: true
+          cache-from: type=registry,ref=jacanales/php-fpm:7.4
+          cache-to: type=inline
+          tags: |
+            jacanales/php-fpm:7.4
+            ghcr.io/jacanales/php-fpm:7.4

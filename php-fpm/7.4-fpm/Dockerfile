@@ -26,19 +26,19 @@ RUN apt update \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN pecl install \
-        apcu \
-        redis \
-        igbinary \
-        amqp \
-        rdkafka \
-        grpc \
-        protobuf
+#RUN pecl install \
+#        apcu \
+#        redis \
+#        igbinary \
+#        amqp \
+#        rdkafka \
+#        grpc \
+#        protobuf
 
-RUN docker-php-ext-enable \
-        igbinary \
-        apcu \
-        redis
+#RUN docker-php-ext-enable \
+#        igbinary \
+#        apcu \
+#        redis
 
 ENV XDEBUG_REMOTE_HOST 127.0.0.1
 
