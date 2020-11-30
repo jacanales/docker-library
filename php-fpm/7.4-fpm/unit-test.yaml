@@ -3,8 +3,6 @@ fileExistenceTests:
   - name: 'Check composer exists'
     path: '/usr/local/bin/composer'
     shouldExist: true
-    uid: 1000
-    gid: 1000
     isExecutableBy: 'group'
   - name: 'Check workdir exists'
     path: '/code'
@@ -21,7 +19,7 @@ commandTests:
   - name: "PHP installed modules"
     command: "php"
     args: [ "-m" ]
-    expectedOutput: [ "apcu", "bcmath", "igbinary", "redis", "sockets" ]
+    expectedOutput: [ "apcu", "igbinary", "redis" ]
   - name: "PECL installed packages"
     command: "pecl"
     args: [ "list" ]
@@ -30,7 +28,7 @@ metadataTest:
   env:
     - key: XDEBUG_REMOTE_HOST
       value: 127.0.0.1
-  entrypoint: ["docker-php-entrypoint"]
+  entrypoint: ["docker-php-entrypoint", "dockerize"]
   exposedPorts: ["9000"]
-  cmd: ["php-fpm"]
+  cmd: ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
   workdir: "/code"

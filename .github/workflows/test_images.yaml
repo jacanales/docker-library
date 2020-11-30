@@ -9,9 +9,21 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - name: Build image
-        run: make build-php-test
+      - name: Docker cache
+        uses: actions/cache@v1
+        with:
+          path: /tmp/docker-registry
+          key: docker-registry-buildkit-${{ hashFiles('Dockerfile') }}
 
+      - name: Start local Docker Registry
+        run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
+        
+      - name: Build image
+        run: DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t jacanales/php-fpm:test --cache-from=localhost:5000/jacanales/php-fpm:test --build-arg BUILDKIT_INLINE_CACHE=1
+
+      - name: Push image build into local registry
+        run: docker tag thing localhost:5000/thing && docker push localhost:5000/jacanales/php-fpm:test || true
+        
       - name: Install Container tests
         run: curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 && chmod +x container-structure-test-linux-amd64 && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
 
