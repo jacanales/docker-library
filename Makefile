@@ -30,21 +30,22 @@ build-php-alpine: ## Build PHP Image
 build-php-minideb: ## Build PHP Image
 	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-minideb -t jacanales/php-fpm:minideb-test
 
-build-php-legacy: ## Build PHP Image
-	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-old -t jacanales/php-fpm:legacy-test
-
+# https://github.com/GoogleContainerTools/container-structure-test
 install-container-test:
 	$(BASH) ./bin/install-container-structure-test.sh
-
-tests: ## Run Tests
-	container-structure-test test --image jacanales/php-fpm:test --config php-fpm/7.4-fpm/unit-test.yaml
 
 # Push targets
 docker-login:
 	docker login -u jacanales -p ${PACKAGES} docker.pkg.github.com
 
-docker-build:
+docker-build: ## Build PHP Image
 	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t docker.pkg.github.com/jacanales/danceschool/php:7.4
+
+build-php-test: ## Build PHP Image for testing
+	DOCKER_BUILDKIT=1 docker build php-fpm/7.4-fpm -t jacanales/php-fpm:test
+
+tests: ## Run Tests
+	container-structure-test test --image jacanales/php-fpm:test --config php-fpm/7.4-fpm/unit-test.yaml
 
 docker-push: docker-login docker-build-php
 	docker push docker.pkg.github.com/jacanales/danceschool/php:7.4

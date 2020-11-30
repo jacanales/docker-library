@@ -1,0 +1,19 @@
+name: Publish Docker image
+on:
+  push: ~
+jobs:
+  test:
+    name: Test images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Build image
+        run: make build-php-test
+
+      - name: Install Container tests
+        run: curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 && chmod +x container-structure-test-linux-amd64 && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
+
+      - name: Container tests
+        run: make tests
